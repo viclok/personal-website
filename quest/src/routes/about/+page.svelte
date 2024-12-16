@@ -3,24 +3,36 @@
 	<meta name="description" content="About this app" />
 </svelte:head>
 
+<script lang='ts'>
+	let { form } = $props();
+	const displaySuggestions = (): string[] => {
+		if (form?.suggestions) {
+			let suggestionArray: string[] = form?.suggestions.split("@")
+			return suggestionArray;
+		}
+		return ["An error has occurred"];
+	};
+</script>
+
 <div class="text-column">
-	<h1>About this app</h1>
-
-	<p>
-		This is a <a href="https://svelte.dev/docs/kit">SvelteKit</a> app. You can make your own by typing
-		the following into your command line and following the prompts:
-	</p>
-
-	<pre>npx sv create</pre>
-
-	<p>
-		The page you're looking at is purely static HTML, with no client-side interactivity needed.
-		Because of that, we don't need to load any JavaScript. Try viewing the page's source, or opening
-		the devtools network panel and reloading.
-	</p>
-
-	<p>
-		The <a href="/sverdle">Sverdle</a> page illustrates SvelteKit's data loading and form handling. Try
-		using it with JavaScript disabled!
-	</p>
+	<form method="POST">
+		<label>
+			Goal:
+			<input name="user_goal" type="text" defaultValue="Get fit">
+		</label>
+		<label>
+			Energy:
+			<input name ="energy" type="number" min="1" max="10" defaultValue=5>
+		</label>
+		<button type="submit">Submit</button>
+	</form>
 </div>
+
+{#if form}
+	<ul>
+		{#each displaySuggestions() as suggestion}
+			<li>{suggestion}</li>
+		{/each}
+	</ul>
+
+{/if}
