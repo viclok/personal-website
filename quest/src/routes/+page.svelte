@@ -1,59 +1,42 @@
-<script lang="ts">
-	import Counter from './Counter.svelte';
-	import welcome from '$lib/images/svelte-welcome.webp';
-	import welcomeFallback from '$lib/images/svelte-welcome.png';
-</script>
-
 <svelte:head>
-	<title>Home</title>
-	<meta name="description" content="Svelte demo app" />
+	<title>Battle Log</title>
+	<meta name="description" content="About this app" />
 </svelte:head>
 
-<section>
-	<h1>
-		<span class="welcome">
-			<picture>
-				<source srcset={welcome} type="image/webp" />
-				<img src={welcomeFallback} alt="Welcome" />
-			</picture>
-		</span>
+<script lang='ts'>
+	let { form } = $props();
+	const displaySuggestions = (): string[] => {
+		if (form?.suggestions) {
+			let suggestionArray: string[] = form?.suggestions.split("@")
+			return suggestionArray;
+		}
+		return ["An error has occurred"];
+	};
+</script>
 
-		to your new<br />SvelteKit app
-	</h1>
+<h1>Choose your quest</h1>
 
-	<h2>
-		try editing <strong>src/routes/+page.svelte</strong>
-	</h2>
+<div class="text-column">
+	<form method="POST" action="?/requestGoal">
+		<label>
+			I would like to
+			<input name="user_goal" type="text" defaultValue="Get fit">
+		</label>
+		<label>
+			Energy:
+			<input name ="energy" type="number" min="1" max="10" defaultValue=5>
+		</label>
+		<button type="submit">Submit</button>
+	</form>
+</div>
 
-	<Counter />
-</section>
-
-<style>
-	section {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		flex: 0.6;
-	}
-
-	h1 {
-		width: 100%;
-	}
-
-	.welcome {
-		display: block;
-		position: relative;
-		width: 100%;
-		height: 0;
-		padding: 0 0 calc(100% * 495 / 2048) 0;
-	}
-
-	.welcome img {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		display: block;
-	}
-</style>
+{#if form}
+	<ul>
+		{#each displaySuggestions() as suggestion}
+			<li>{suggestion}</li>
+		{/each}
+	</ul>
+	<form method ="POST" action="?/reroll">
+		<button type="submit">Reroll</button>
+	</form>
+{/if}
