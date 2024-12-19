@@ -5,6 +5,9 @@
 
 <script lang='ts'>
 	let { form } = $props();
+	let questSelected = $state();
+	let outcome = $state();
+
 	const displaySuggestions = (): string[] => {
 		if (form?.suggestions) {
 			let suggestionArray: string[] = form?.suggestions.split("@")
@@ -12,6 +15,17 @@
 		}
 		return ["An error has occurred"];
 	};
+	const selectQuest = (suggestion: string) => {
+		questSelected = suggestion;
+	}
+
+	const registerSuccess = (quest_outcome: boolean) => {
+		if (quest_outcome) {
+			outcome = "You won the day"
+		} else {
+			outcome = "Try again tomorrow"
+		}
+	}
 </script>
 
 <h1>Choose your quest</h1>
@@ -31,12 +45,19 @@
 </div>
 
 {#if form}
-	<ul>
-		{#each displaySuggestions() as suggestion}
-			<li>{suggestion}</li>
-		{/each}
-	</ul>
-	<form method ="POST" action="?/reroll">
-		<button type="submit">Reroll</button>
-	</form>
+	{#if !questSelected}
+		<ul>
+			{#each displaySuggestions() as suggestion, i}
+				<li><button onclick={() => selectQuest(suggestion)}>{suggestion}</button></li>
+			{/each}
+		</ul>
+		<form method ="POST" action="?/reroll">
+			<button type="submit">Reroll</button>
+		</form>
+	{:else}
+		<h1>{questSelected}</h1>
+		<button onclick={() => registerSuccess(true)}>Victory</button>
+		<button onclick={() => registerSuccess(false)}>Defeat</button>
+		<h1>{outcome}</h1>
+	{/if}
 {/if}
