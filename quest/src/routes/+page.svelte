@@ -4,9 +4,23 @@
 </svelte:head>
 
 <script lang='ts'>
+	import { onMount } from 'svelte';
+	import { writable } from 'svelte/store';
+
 	let { form } = $props();
 	let questSelected = $state();
 	let outcome = $state();
+	let streak = writable(0);
+
+	onMount(() => {
+		const storedCount = localStorage.getItem('streak');
+		streak = writable(storedCount ? Number(storedCount) : 0);
+
+		streak.subscribe((value) => {
+			localStorage.setItem("streak", value.toString());
+			console.log(value.toString());
+		})
+	})
 
 	const displaySuggestions = (): string[] => {
 		if (form?.suggestions) {
@@ -24,8 +38,10 @@
 		// console.log(quest_outcome);
 		if (quest_outcome) {
 			outcome = "You won the day"
+			streak.update((n) => n + 1);
 		} else {
 			outcome = "Try again tomorrow"
+			streak.update((n) => n = 0);
 		}
 	}
 </script>
@@ -61,5 +77,6 @@
 		<button onclick={() => registerSuccess(true)}>Victory</button>
 		<button onclick={() => registerSuccess(false)}>Defeat</button>
 		<h1>{outcome}</h1>
+		<h2>Current streak is {$streak}</h2>
 	{/if}
 {/if}
