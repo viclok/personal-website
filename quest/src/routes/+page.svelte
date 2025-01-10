@@ -17,9 +17,11 @@
 	};
 	const selectQuest = (suggestion: string) => {
 		questSelected = suggestion;
+		console.log(suggestion + 'and ' + questSelected);
 	}
 
 	const registerSuccess = (quest_outcome: boolean) => {
+		console.log(quest_outcome);
 		if (quest_outcome) {
 			outcome = "You won the day"
 		} else {
