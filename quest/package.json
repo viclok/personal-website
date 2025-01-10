@@ -17,6 +17,7 @@
 		"@fontsource/fira-mono": "^5.1.0",
 		"@neoconfetti/svelte": "^2.2.1",
 		"@sveltejs/adapter-auto": "^3.3.1",
+		"@sveltejs/adapter-vercel": "^5.5.2",
 		"@sveltejs/kit": "^2.11.1",
 		"@sveltejs/vite-plugin-svelte": "^5.0.2",
 		"autoprefixer": "^10.4.20",
@@ -35,7 +36,6 @@
 		"vite": "^6.0.3"
 	},
 	"dependencies": {
-		"@google/generative-ai": "^0.21.0",
-		"@sveltejs/adapter-vercel": "^5.5.2"
+		"@google/generative-ai": "^0.21.0"
 	}
 }
